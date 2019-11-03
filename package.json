@@ -1,0 +1,19 @@
+{
+  "name": "map675-assign-02",
+  "version": "1.0.0",
+  "description": "MAP675 Assignment #2",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/courtneysimonse/map675-assign-02.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/courtneysimonse/map675-assign-02/issues"
+  },
+  "homepage": "https://github.com/courtneysimonse/map675-assign-02#readme"
+}
