@@ -109,7 +109,7 @@
       // list item for each feature in the legend
       for(let i = 0; i <= boundaries.features.length-1; i++) {
           // console.log(boundaries.features[i]);
-          legendList.append('<li class="legend-item" id="' + boundaries.features[i].properties["PARKDISTRICT"] + '"><a style="color:' + colors.Antique[6][i] + '" href="#">' + boundaries.features[i].properties["PARKDISTRICT"] + '</a></li>');
+          legendList.append('<li class="legend-item" id="obj-id-' + boundaries.features[i].properties["OBJECTID"] + '"><a style="color:' + colors.Antique[6][i] + '" href="#">' + boundaries.features[i].properties["PARKDISTRICT"] + '</a></li>');
       }
 
       // create a layerGroup with the geojson data
@@ -132,7 +132,7 @@
 
             // select the cooresponding list item
             // and add the highlight class to make bold
-            $('#' +feature.properties["PARKDISTRICT"]).addClass('highlight');
+            $('#obj-id-' + feature.properties["OBJECTID"]).addClass('highlight');
           })
           //on mouseout, reset style
           layer.on('mouseout', function () {
@@ -140,7 +140,7 @@
               fillOpacity: .6
             });
             // remove highlight from legend
-            $('#' +feature.properties["PARKDISTRICT"]).removeClass('highlight');
+            $('#obj-id-' + feature.properties["OBJECTID"]).removeClass('highlight');
 
           })
         }
@@ -150,7 +150,7 @@
       $('.legend-item').on('mouseover', function() {
           // extract the specific number from the specific item
           // being moused over
-          var num = this.id.replace('district-', '');
+          var num = this.id.replace('obj-id-', '');
           // send this number as an argument to the highlightDistrict function
           highlightDistrict(num);
       });
@@ -159,11 +159,11 @@
       $('.legend-item').on('click', function() {
         // extract the specific number from the specific item
         // being moused over
-        var idNum = this.id.replace('district-', '');
+        var idNum = this.id.replace('obj-id-', '');
         // loop through the disctricts polygons
         boundariesLayerGroup.eachLayer(function(layer) {
             // if the district id matches the one we clicked
-            if(layer.feature.properties.council_di === idNum) {
+            if(layer.feature.properties.OBJECTID === idNum) {
               // zoom to bounds
               map.flyToBounds(layer.getBounds());
             }
@@ -173,8 +173,8 @@
       function highlightDistrict(districtNum) {
           // loop through the boundaries polygons
           boundariesLayerGroup.eachLayer(function(layer) {
-              // if the district id matches the one we're mousing over
-              if(layer.feature.properties.council_di === districtNum) {
+              // if the objectid matches the one we're mousing over
+              if(layer.feature.properties.OBJECTID === districtNum) {
                   // change the layer style
                   layer.setStyle({
                       fillOpacity: .8
