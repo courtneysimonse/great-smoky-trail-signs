@@ -86,22 +86,6 @@
     const trailsData = d3.json('data/trails.json');
     const signsData = d3.json('data/signs.json')
 
-    // // use Promise to wait until data is all loaded
-    // Promise.all([districtsData, colorsData, trafficData]).then(dataReady);
-    //
-    //
-    // function dataReady(data) {
-    //   // function is called when Promise is fulfilled and data is ready
-    //
-    //   // inspect array of data
-    //   console.log(data);
-    //
-    //   // pull out separate data arrays and assign to variables
-    //   const districts = data[0];
-    //   const colors = data[1];
-    //   const signals = data[2];
-    // }
-
     // use Promise to wait until data is all loaded
     Promise.all([boundariesData, colorsData, trailsData, signsData]).then(drawMap);
 
@@ -113,6 +97,7 @@
 
       // pull out separate data arrays and assign to variables
       const boundaries = data[0];
+      // console.log(boundaries);
       const colors = data[1];
       const trails = data[2];
       const signs = data[3];
@@ -120,75 +105,74 @@
       // store a reference to the HTML list
       const legendList = $('#legend-list');
 
-      // // loop through the features and create a new
-      // // list item for each feature in the legend
-      // for(let i = 1; i <= districts.features.length; i++) {
-      //     legendList.append('<li class="legend-item" id="district-' + i + '"><a style="color:' + colors.Antique[10][i -1] + '" href="#">District ' + i + ' (<span></span>)</a></li>');
-      // }
-      //
-      // // create a layerGroup with the geojson data
-      // var districtsLayerGroup = L.geoJson(districts, {
-      //   style: function (feature) {
-      //     // use the colors object to style each polygon a unique color
-      //     return {
-      //       color: colors.Antique[10][feature.properties.council_di - 1],
-      //       fillOpacity: .6
-      //     }
-      //   },
-      //   onEachFeature(feature, layer) {
-      //     // select each legend list item span and append the total count of signals
-      //     $('#district-' + feature.properties.council_di + ' span').append(feature.properties.count);
-      //
-      //     //when mousing over a polygon layer
-      //     layer.on('mouseover', function () {
-      //       // provide a visual affordance
-      //       this.setStyle({
-      //         fillOpacity: .8
-      //       });
-      //
-      //       // select the cooresponding list item
-      //       // and add the highlight class to make bold
-      //       $('#district-' + feature.properties.council_di).addClass('highlight');
-      //     })
-      //     //on mouseout, reset style
-      //     layer.on('mouseout', function () {
-      //       this.setStyle({
-      //         fillOpacity: .6
-      //       });
-      //       // remove highlight from legend
-      //       $('#district-' + feature.properties.council_di).removeClass('highlight');
-      //
-      //     })
-      //   }
-      // }).addTo(map);
-      //
-      // // select all the list items and on mouseover
-      // $('.legend-item').on('mouseover', function() {
-      //     // extract the specific number from the specific item
-      //     // being moused over
-      //     var num = this.id.replace('district-', '');
-      //     // send this number as an argument to the highlightDistrict function
-      //     highlightDistrict(num);
-      // });
-      //
-      // // select all the list items and on click
-      // $('.legend-item').on('click', function() {
-      //   // extract the specific number from the specific item
-      //   // being moused over
-      //   var idNum = this.id.replace('district-', '');
-      //   // loop through the disctricts polygons
-      //   districtsLayerGroup.eachLayer(function(layer) {
-      //       // if the district id matches the one we clicked
-      //       if(layer.feature.properties.council_di === idNum) {
-      //         // zoom to bounds
-      //         map.flyToBounds(layer.getBounds());
-      //       }
-      //   });
-      // });
+      // loop through the features and create a new
+      // list item for each feature in the legend
+      for(let i = 0; i <= boundaries.features.length-1; i++) {
+          // console.log(boundaries.features[i]);
+          legendList.append('<li class="legend-item" id="' + boundaries.features[i].properties["PARKDISTRICT"] + '"><a style="color:' + colors.Antique[6][i] + '" href="#">' + boundaries.features[i].properties["PARKDISTRICT"] + '</a></li>');
+      }
+
+      // create a layerGroup with the geojson data
+      var boundariesLayerGroup = L.geoJson(boundaries, {
+        style: function (feature) {
+          // console.log(feature.properties.OBJECTID);
+          // use the colors object to style each polygon a unique color
+          return {
+            color: colors.Antique[6][feature.properties.OBJECTID-1],
+            fillOpacity: .6
+          }
+        },
+        onEachFeature(feature, layer) {
+          //when mousing over a polygon layer
+          layer.on('mouseover', function () {
+            // provide a visual affordance
+            this.setStyle({
+              fillOpacity: .8
+            });
+
+            // select the cooresponding list item
+            // and add the highlight class to make bold
+            $('#' +feature.properties["PARKDISTRICT"]).addClass('highlight');
+          })
+          //on mouseout, reset style
+          layer.on('mouseout', function () {
+            this.setStyle({
+              fillOpacity: .6
+            });
+            // remove highlight from legend
+            $('#' +feature.properties["PARKDISTRICT"]).removeClass('highlight');
+
+          })
+        }
+      }).addTo(map);
+
+      // select all the list items and on mouseover
+      $('.legend-item').on('mouseover', function() {
+          // extract the specific number from the specific item
+          // being moused over
+          var num = this.id.replace('district-', '');
+          // send this number as an argument to the highlightDistrict function
+          highlightDistrict(num);
+      });
+
+      // select all the list items and on click
+      $('.legend-item').on('click', function() {
+        // extract the specific number from the specific item
+        // being moused over
+        var idNum = this.id.replace('district-', '');
+        // loop through the disctricts polygons
+        boundariesLayerGroup.eachLayer(function(layer) {
+            // if the district id matches the one we clicked
+            if(layer.feature.properties.council_di === idNum) {
+              // zoom to bounds
+              map.flyToBounds(layer.getBounds());
+            }
+        });
+      });
 
       function highlightDistrict(districtNum) {
-          // loop through the districts polygons
-          districtsLayerGroup.eachLayer(function(layer) {
+          // loop through the boundaries polygons
+          boundariesLayerGroup.eachLayer(function(layer) {
               // if the district id matches the one we're mousing over
               if(layer.feature.properties.council_di === districtNum) {
                   // change the layer style
