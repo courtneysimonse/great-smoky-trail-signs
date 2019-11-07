@@ -1,7 +1,6 @@
 // load modules
-const bindData = require('./bindData.js');
+const bindData = require('./simplifyData.js');
 const colorScheme = require('./colorScheme.js');
-const csvConversion = require('./csv2geojson.js');
 const fs = require('fs');
 
 // path to data directory
@@ -25,5 +24,5 @@ fs.mkdir(dir, function (err) {
 });
 
 // run the processes
-// bindData.processBindFiles();
+simplifyData.simplifyFiles();
 colorScheme.extractColors();
