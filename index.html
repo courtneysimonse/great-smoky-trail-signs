@@ -160,10 +160,11 @@
         // extract the specific number from the specific item
         // being moused over
         var idNum = this.id.replace('obj-id-', '');
+        console.log(idNum);
         // loop through the disctricts polygons
         boundariesLayerGroup.eachLayer(function(layer) {
             // if the district id matches the one we clicked
-            if(layer.feature.properties.OBJECTID === idNum) {
+            if(layer.feature.properties.OBJECTID == idNum) {
               // zoom to bounds
               map.flyToBounds(layer.getBounds());
             }
