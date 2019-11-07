@@ -160,7 +160,7 @@
         // extract the specific number from the specific item
         // being moused over
         var idNum = this.id.replace('obj-id-', '');
-        console.log(idNum);
+        // console.log(idNum);
         // loop through the disctricts polygons
         boundariesLayerGroup.eachLayer(function(layer) {
             // if the district id matches the one we clicked
@@ -201,7 +201,12 @@
           var coords = feature.geometry.coordinates,
               marker = L.marker([coords[1], coords[0]]);
           // bind a tooltip to the marker
-          marker.bindTooltip("Trail: " + feature.properties.TRAILNAME);
+          if (feature.properties.NOTES == null) {
+              marker.bindTooltip("Notes: N/A")
+          } else {
+              marker.bindTooltip("Notes: " + feature.properties.NOTES);
+          }
+
           // add the marker to the markerClusterGroup
           markers.addLayer(marker);
         }
