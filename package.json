@@ -19,5 +19,8 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "mapshaper": "^0.4.140"
-  }
+  },
+  "scripts": {
+  "start": "node scripts/processData.js && live-server"
+}
 }
