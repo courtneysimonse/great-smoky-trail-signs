@@ -1,36 +1,5 @@
 const fs = require('fs');
-const csv2geojson = require('csv2geojson');
 const chalk = require('chalk');
-
-function convertCsv() {
-
-  fs.readFile(__dirname + '/../project-files/austin-traffic-signals.csv', 'utf-8', (err, csvString) => {
-
-    if (err) throw err;
-
-    console.log(chalk.green('austin-traffic-signals.csv loaded'))
-    console.log(chalk.green('parsing csv ...'))
-
-    csv2geojson.csv2geojson(csvString, {
-      latfield: 'LATITUDE',
-      lonfield: 'LONGITUDE',
-      delimiter: ','
-    }, (err, geojson) => {
-
-      if (err) throw err;
-
-      var outGeoJSON = filterFields(geojson);
-
-
-      fs.writeFile(__dirname + '/../data/austin-traffic-signals.json', JSON.stringify(outGeoJSON), 'utf-8', (err) => {
-
-        if (err) throw err;
-
-        console.log(chalk.green('austin-traffic-signals.json written to file'));
-      });
-    })
-  });
-}
 
 function filterFields(geojson) {
 
@@ -60,5 +29,4 @@ function filterFields(geojson) {
   }
 }
 
-exports.convertCsv = convertCsv;
 exports.filterFields = filterFields;

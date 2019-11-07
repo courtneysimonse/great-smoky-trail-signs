@@ -5,10 +5,10 @@
 <head>
   <meta charset="utf-8">
 
-  <title>Austin Traffic Districts</title>
+  <title>Great Smoky Mountains NP Trails and Signs</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
-  <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.css" />
+  <!-- <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.css" /> -->
   <style>
     body {
       font-family: sans-serif;
@@ -56,21 +56,21 @@
   <div id="map"></div>
 
   <div id="ui">
-      <h3>Austin City Districts</h3>
-      <h4>(number of traffic signals)</h4>
+      <h3>Admin Districts</h3>
+      <h4>(number of trail signs)</h4>
       <ul id="legend-list"></ul>
   </div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <script src="libs/Leaflet.markercluster/leaflet.markercluster.js"></script>
+  <!-- <script src="libs/Leaflet.markercluster/leaflet.markercluster.js"></script> -->
 
   <script>
     const options = {
       center: [30.30927, -97.74211],
       zoom: 10,
-      zoomSnap: .5
+      zoomSnap: .1
     }
 
     const map = L.map('map', options);
@@ -83,7 +83,8 @@
     // use D3 fetch to request data with async requests
     const districtsData = d3.json('data/districts-counts.json');
     const colorsData = d3.json('data/vividcolors.json');
-    const trafficData = d3.json('data/austin-traffic-signals.json');
+    const trailsData = d3.json('data/trails.json');
+    const signsData = d3.json('data/trail-signs.json')
 
     // // use Promise to wait until data is all loaded
     // Promise.all([districtsData, colorsData, trafficData]).then(dataReady);
@@ -102,7 +103,7 @@
     // }
 
     // use Promise to wait until data is all loaded
-    Promise.all([districtsData, colorsData, trafficData]).then(drawMap);
+    Promise.all([districtsData, colorsData, trailsData, signsData]).then(drawMap);
 
     function drawMap(data) {
       // function is called when Promise is fulfilled and data is ready
@@ -113,7 +114,8 @@
       // pull out separate data arrays and assign to variables
       const districts = data[0];
       const colors = data[1];
-      const signals = data[2];
+      const trails = data[2];
+      const signs = data[3];
 
       // store a reference to the HTML list
       const legendList = $('#legend-list');

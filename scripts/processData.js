@@ -25,6 +25,5 @@ fs.mkdir(dir, function (err) {
 });
 
 // run the processes
-bindData.processBindFiles();
+// bindData.processBindFiles();
 colorScheme.extractColors();
-csvConversion.convertCsv();

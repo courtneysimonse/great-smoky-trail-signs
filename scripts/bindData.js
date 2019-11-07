@@ -1,6 +1,5 @@
 // load modules
 const fs = require('fs');
-// const csvParse = require('csv-parse');
 const chalk = require('chalk');
 const mapshaper = require('mapshaper');
 
@@ -15,8 +14,8 @@ function processBindFiles() {
     // filter properties to only keep "PARKDISTRICT", simplify verticies and coordinate precision, output to geojson
     const commands = '-filter-fields PARKDISTRICT -simplify dp 5% -o precision=.0001 format=geojson';
 
-    // run mapshaper on the council district data with the commands above
-    mapshaper.applyCommands(commands, geojson, (err, data) => {
+    // run mapshaper on the park district data with the commands above
+    mapshaper.runCommands(commands, geojson, (err, data) => {
 
       // output error to console
       if (err) throw err;
