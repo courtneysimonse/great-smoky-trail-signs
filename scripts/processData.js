@@ -1,5 +1,5 @@
 // load modules
-const bindData = require('./simplifyData.js');
+const simplifyData = require('./simplifyData.js');
 const colorScheme = require('./colorScheme.js');
 const fs = require('fs');
 
