@@ -214,6 +214,16 @@
       // // add the markerClusterGroup to the map
       map.addLayer(markers);
 
+      var trailsLayer = L.geoJson(trails, {
+          style: {
+              color: colors.Antique[10][0],  // I should use a different color...
+              weight: 1
+          },
+          onEachFeature(feature, layer) {
+            layer.bindTooltip(feature.properties.TRAILNAME);
+          }
+      }).addTo(map);
+
     }
   </script>
 </body>
