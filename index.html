@@ -7,8 +7,8 @@
 
   <title>Great Smoky Mountains NP Trails and Signs</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
-  <!-- <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.Default.css" />
-  <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.css" /> -->
+  <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="libs/Leaflet.markercluster/MarkerCluster.css" />
   <style>
     body {
       font-family: sans-serif;
@@ -64,7 +64,7 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-  <!-- <script src="libs/Leaflet.markercluster/leaflet.markercluster.js"></script> -->
+  <script src="libs/Leaflet.markercluster/leaflet.markercluster.js"></script>
 
   <script>
     const options = {
@@ -190,21 +190,23 @@
       }
 
       // // create new markerClusterGroup
-      // var markers = L.markerClusterGroup();
+      var markers = L.markerClusterGroup();
       //
-      // // loop through all our signals features
-      // signals.features.forEach(function(feature) {
-      //   // create a new Leaflet marker for each
-      //   var coords = feature.geometry.coordinates,
-      //       marker = L.marker([coords[1], coords[0]]);
-      //   // bind a tooltip to the marker
-      //   marker.bindTooltip("Signal ID: " + feature.properties.SIGNAL_ID);
-      //   // add the marker to the markerClusterGroup
-      //   markers.addLayer(marker);
-      //
-      // });
+      // loop through all our signals features
+      signs.features.forEach(function(feature) {
+        // create a new Leaflet marker for each
+        // console.log(feature.geometry);
+        if (feature.geometry != null) {
+          var coords = feature.geometry.coordinates,
+              marker = L.marker([coords[1], coords[0]]);
+          // bind a tooltip to the marker
+          marker.bindTooltip("Trail: " + feature.properties.TRAILNAME);
+          // add the marker to the markerClusterGroup
+          markers.addLayer(marker);
+        }
+      });
       // // add the markerClusterGroup to the map
-      // map.addLayer(markers);
+      map.addLayer(markers);
 
     }
   </script>
