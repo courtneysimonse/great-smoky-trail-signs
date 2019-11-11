@@ -24,29 +24,34 @@
     }
 
     #ui {
-    position: absolute;
-    z-index: 1000; /* place above map */
-    bottom: 18px;
-    right: 18px;
-    padding: 6px 12px;
-    background: rgba(256,256,256,.9);
+      position: absolute;
+      z-index: 1000;
+      /* place above map */
+      bottom: 18px;
+      right: 18px;
+      padding: 6px 12px;
+      background: rgba(256, 256, 256, .9);
     }
 
     #ui ul {
-        list-style-type: none;
-        padding: 0;
+      list-style-type: none;
+      padding: 0;
     }
+
     #ui li {
-        margin-bottom: 6px;
+      margin-bottom: 6px;
     }
+
     #ui a {
-        text-decoration: none;
+      text-decoration: none;
     }
+
     #ui a:hover {
-        font-weight: bold;
+      font-weight: bold;
     }
+
     .highlight {
-        font-weight: bold;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -56,8 +61,8 @@
   <div id="map"></div>
 
   <div id="ui">
-      <h3>Park Areas</h3>
-      <ul id="legend-list"></ul>
+    <h3>Park Areas</h3>
+    <ul id="legend-list"></ul>
   </div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -91,12 +96,8 @@
     function drawMap(data) {
       // function is called when Promise is fulfilled and data is ready
 
-      // inspect array of data if you wish
-      // console.log(data);
-
       // pull out separate data arrays and assign to variables
       const boundaries = data[0];
-      // console.log(boundaries);
       const colors = data[1];
       const trails = data[2];
       const signs = data[3];
@@ -106,9 +107,11 @@
 
       // loop through the features and create a new
       // list item for each feature in the legend
-      for(let i = 0; i <= boundaries.features.length-1; i++) {
-          // console.log(boundaries.features[i]);
-          legendList.append('<li class="legend-item" id="obj-id-' + boundaries.features[i].properties["OBJECTID"] + '"><a style="color:' + colors.Antique[6][i] + '" href="#">' + boundaries.features[i].properties["PARKDISTRICT"] + '</a></li>');
+      for (let i = 0; i <= boundaries.features.length - 1; i++) {
+        // console.log(boundaries.features[i]);
+        legendList.append('<li class="legend-item" id="obj-id-' + boundaries.features[i].properties["OBJECTID"] +
+          '"><a style="color:' + colors.Antique[6][i] + '" href="#">' + boundaries.features[i].properties[
+            "PARKDISTRICT"] + '</a></li>');
       }
 
       // create a layerGroup with the geojson data
@@ -117,7 +120,7 @@
           // console.log(feature.properties.OBJECTID);
           // use the colors object to style each polygon a unique color
           return {
-            color: colors.Antique[6][feature.properties.OBJECTID-1],
+            color: colors.Antique[6][feature.properties.OBJECTID - 1],
             fillOpacity: .6
           }
         },
@@ -146,64 +149,64 @@
       }).addTo(map);
 
       // select all the list items and on mouseover
-      $('.legend-item').on('mouseover', function() {
-          // extract the specific number from the specific item
-          // being moused over
-          var num = this.id.replace('obj-id-', '');
-          // send this number as an argument to the highlightDistrict function
-          highlightDistrict(num);
+      $('.legend-item').on('mouseover', function () {
+        // extract the specific number from the specific item
+        // being moused over
+        var num = this.id.replace('obj-id-', '');
+        // send this number as an argument to the highlightDistrict function
+        highlightDistrict(num);
       });
 
       // select all the list items and on click
-      $('.legend-item').on('click', function() {
+      $('.legend-item').on('click', function () {
         // extract the specific number from the specific item
         // being moused over
         var idNum = this.id.replace('obj-id-', '');
-        // console.log(idNum);
+
         // loop through the disctricts polygons
-        boundariesLayerGroup.eachLayer(function(layer) {
-            // if the district id matches the one we clicked
-            if(layer.feature.properties.OBJECTID == idNum) {
-              // zoom to bounds
-              map.flyToBounds(layer.getBounds());
-            }
+        boundariesLayerGroup.eachLayer(function (layer) {
+          // if the district id matches the one we clicked
+          if (layer.feature.properties.OBJECTID == idNum) {
+            // zoom to bounds
+            map.flyToBounds(layer.getBounds());
+          }
         });
       });
 
       function highlightDistrict(districtNum) {
-          // loop through the boundaries polygons
-          boundariesLayerGroup.eachLayer(function(layer) {
-              // if the objectid matches the one we're mousing over
-              if(layer.feature.properties.OBJECTID === districtNum) {
-                  // change the layer style
-                  layer.setStyle({
-                      fillOpacity: .8
-                  }).bringToFront();
+        // loop through the boundaries polygons
+        boundariesLayerGroup.eachLayer(function (layer) {
+          // if the objectid matches the one we're mousing over
+          if (layer.feature.properties.OBJECTID === districtNum) {
+            // change the layer style
+            layer.setStyle({
+              fillOpacity: .8
+            }).bringToFront();
 
-              } else {
-                  // return to original
-                  layer.setStyle({
-                      fillOpacity: .6
-                  });
-              }
-          });
+          } else {
+            // return to original
+            layer.setStyle({
+              fillOpacity: .6
+            });
+          }
+        });
       }
 
       // // create new markerClusterGroup
       var markers = L.markerClusterGroup();
       //
       // loop through all our signals features
-      signs.features.forEach(function(feature) {
+      signs.features.forEach(function (feature) {
         // create a new Leaflet marker for each
         // console.log(feature.geometry);
         if (feature.geometry != null) {
           var coords = feature.geometry.coordinates,
-              marker = L.marker([coords[1], coords[0]]);
+            marker = L.marker([coords[1], coords[0]]);
           // bind a tooltip to the marker
           if (feature.properties.NOTES == null) {
-              marker.bindTooltip("Notes: N/A")
+            marker.bindTooltip("Notes: N/A")
           } else {
-              marker.bindTooltip("Notes: " + feature.properties.NOTES);
+            marker.bindTooltip("Notes: " + feature.properties.NOTES);
           }
 
           // add the marker to the markerClusterGroup
@@ -214,13 +217,13 @@
       map.addLayer(markers);
 
       var trailsLayer = L.geoJson(trails, {
-          style: {
-              color: colors.Antique[10][0],  // I should use a different color...
-              weight: 1
-          },
-          onEachFeature(feature, layer) {
-            layer.bindTooltip(feature.properties.TRAILNAME);
-          }
+        style: {
+          color: colors.Antique[10][0], // I should use a different color...
+          weight: 1
+        },
+        onEachFeature(feature, layer) {
+          layer.bindTooltip(feature.properties.TRAILNAME);
+        }
       }).addTo(map);
 
     }
